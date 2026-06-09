@@ -96,6 +96,7 @@ export interface Database {
           ssn_last4: string | null;
           emergency_contact: Json | null;
           screening_status: string | null;
+          status: string;
           created_at: string;
         };
         Insert: Partial<Database["public"]["Tables"]["tenants"]["Row"]> & {
@@ -113,6 +114,8 @@ export interface Database {
           end_date: string | null;
           monthly_rent: number;
           security_deposit: number | null;
+          late_fee_amount: number | null;
+          grace_period_days: number;
           status: string;
           signed_at: string | null;
           document_url: string | null;
@@ -142,6 +145,146 @@ export interface Database {
           role: string;
         };
         Update: Partial<Database["public"]["Tables"]["roles"]["Row"]>;
+      };
+      payments: {
+        Row: {
+          id: string;
+          lease_id: string | null;
+          tenant_id: string;
+          unit_id: string | null;
+          amount: number;
+          type: string;
+          status: string;
+          due_date: string | null;
+          paid_at: string | null;
+          stripe_payment_intent_id: string | null;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["payments"]["Row"]> & {
+          tenant_id: string;
+          amount: number;
+          type: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["payments"]["Row"]>;
+      };
+      vendors: {
+        Row: {
+          id: string;
+          org_id: string;
+          name: string;
+          contact_name: string | null;
+          email: string | null;
+          phone: string | null;
+          categories: string[] | null;
+          rating: number | null;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["vendors"]["Row"]> & {
+          org_id: string;
+          name: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["vendors"]["Row"]>;
+      };
+      work_orders: {
+        Row: {
+          id: string;
+          property_id: string;
+          unit_id: string | null;
+          tenant_id: string | null;
+          vendor_id: string | null;
+          title: string;
+          description: string | null;
+          category: string;
+          priority: string;
+          status: string;
+          photos: string[] | null;
+          cost: number | null;
+          completed_at: string | null;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["work_orders"]["Row"]> & {
+          property_id: string;
+          title: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["work_orders"]["Row"]>;
+      };
+      inspection_templates: {
+        Row: {
+          id: string;
+          org_id: string;
+          name: string;
+          type: string;
+          sections: Json;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["inspection_templates"]["Row"]> & {
+          org_id: string;
+          name: string;
+          type: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["inspection_templates"]["Row"]>;
+      };
+      inspections: {
+        Row: {
+          id: string;
+          unit_id: string;
+          lease_id: string | null;
+          inspector_id: string | null;
+          type: string;
+          status: string;
+          template_id: string | null;
+          checklist_data: Json | null;
+          pdf_url: string | null;
+          scheduled_date: string | null;
+          completed_at: string | null;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["inspections"]["Row"]> & {
+          unit_id: string;
+          type: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["inspections"]["Row"]>;
+      };
+      applicants: {
+        Row: {
+          id: string;
+          org_id: string;
+          unit_id: string | null;
+          full_name: string;
+          email: string;
+          phone: string | null;
+          monthly_income: number | null;
+          employer: string | null;
+          move_in_date: string | null;
+          occupants: number | null;
+          pets: boolean;
+          consent_to_screen: boolean;
+          status: string;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["applicants"]["Row"]> & {
+          org_id: string;
+          full_name: string;
+          email: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["applicants"]["Row"]>;
+      };
+      tenant_notes: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          user_id: string | null;
+          body: string;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["tenant_notes"]["Row"]> & {
+          tenant_id: string;
+          body: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["tenant_notes"]["Row"]>;
       };
     };
   };

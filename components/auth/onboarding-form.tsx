@@ -21,7 +21,8 @@ export function OnboardingForm() {
         <Input
           id="organizationName"
           name="organizationName"
-          placeholder="Acme Properties LLC"
+          placeholder="Wave"
+          defaultValue="Wave"
           required
         />
       </div>

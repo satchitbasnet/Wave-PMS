@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { APP_NAME } from "@/lib/brand";
 import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +9,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
           <Building2 className="h-6 w-6" />
-          PropFlow
+          {APP_NAME}
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-slate-600 md:flex dark:text-slate-400">
           <Link href="/#features" className="hover:text-slate-900 dark:hover:text-slate-200">

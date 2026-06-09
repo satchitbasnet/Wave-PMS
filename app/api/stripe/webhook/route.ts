@@ -6,7 +6,8 @@ import {
   planIdFromPriceId,
   planIdFromProductMetadata,
 } from "@/lib/stripe-plans";
-import { getStripe } from "@/lib/stripe";
+import { getStripeClient } from "@/lib/stripe/client";
+import { requireWebhookSecret } from "@/lib/stripe/config";
 
 function getSupabaseAdmin(): SupabaseClient {
   return createClient(
@@ -50,13 +51,13 @@ export async function POST(request: Request) {
   }
 
   let event: Stripe.Event;
-  const stripe = getStripe();
+  const stripeClient = getStripeClient();
 
   try {
-    event = stripe.webhooks.constructEvent(
+    event = stripeClient.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      requireWebhookSecret()
     );
   } catch (error) {
     console.error("Webhook signature verification failed:", error);
@@ -82,29 +83,94 @@ export async function POST(request: Request) {
       }
       break;
     }
+
     case "customer.subscription.updated": {
       const subscription = event.data.object as Stripe.Subscription;
-      const planId = await resolvePlanFromSubscription(stripe, subscription);
 
-      if (subscription.status === "active" && planId) {
+      // V2 Connect platform subscriptions use customer_account (acct_...), not customer
+      const connectAccountId = subscription.customer_account ?? null;
+
+      if (connectAccountId) {
         await supabaseAdmin
           .from("organizations")
           .update({
-            plan: planId,
-            stripe_subscription_id: subscription.id,
+            platform_subscription_id: subscription.id,
+            platform_subscription_status: subscription.status,
           })
+          .eq("stripe_connect_account_id", connectAccountId);
+
+        // Handle upgrades/downgrades: check subscription.items.data[0].price
+        const priceId = subscription.items.data[0]?.price?.id;
+        console.log(
+          "[Webhook] Connect platform subscription updated:",
+          connectAccountId,
+          subscription.status,
+          priceId
+        );
+        // TODO: Grant/revoke product access based on priceId in your app
+
+        if (subscription.pause_collection) {
+          console.log(
+            "[Webhook] Subscription collections paused until",
+            subscription.pause_collection.resumes_at
+          );
+        }
+        if (subscription.cancel_at_period_end) {
+          console.log("[Webhook] Subscription will cancel at period end");
+        }
+      } else {
+        const planId = await resolvePlanFromSubscription(
+          stripeClient,
+          subscription
+        );
+        if (subscription.status === "active" && planId) {
+          await supabaseAdmin
+            .from("organizations")
+            .update({
+              plan: planId,
+              stripe_subscription_id: subscription.id,
+            })
+            .eq("stripe_subscription_id", subscription.id);
+        }
+      }
+      break;
+    }
+
+    case "customer.subscription.deleted": {
+      const subscription = event.data.object as Stripe.Subscription;
+      const connectAccountId = subscription.customer_account ?? null;
+
+      if (connectAccountId) {
+        await supabaseAdmin
+          .from("organizations")
+          .update({
+            platform_subscription_id: null,
+            platform_subscription_status: "canceled",
+          })
+          .eq("stripe_connect_account_id", connectAccountId);
+        // TODO: Revoke platform features for this connected account
+      } else {
+        await supabaseAdmin
+          .from("organizations")
+          .update({ plan: "starter", stripe_subscription_id: null })
           .eq("stripe_subscription_id", subscription.id);
       }
       break;
     }
-    case "customer.subscription.deleted": {
-      const subscription = event.data.object as Stripe.Subscription;
-      await supabaseAdmin
-        .from("organizations")
-        .update({ plan: "starter", stripe_subscription_id: null })
-        .eq("stripe_subscription_id", subscription.id);
+
+    case "payment_method.attached":
+    case "payment_method.detached":
+    case "customer.updated":
+    case "customer.tax_id.created":
+    case "customer.tax_id.deleted":
+    case "customer.tax_id.updated":
+    case "billing_portal.configuration.created":
+    case "billing_portal.configuration.updated":
+    case "billing_portal.session.created":
+      // Log billing portal / payment method events — update DB as needed
+      console.log("[Webhook] Billing event:", event.type);
+      // TODO: Sync payment method or tax ID changes if you store them locally
       break;
-    }
   }
 
   return NextResponse.json({ received: true });

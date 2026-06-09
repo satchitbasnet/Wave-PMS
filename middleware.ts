@@ -7,17 +7,21 @@ import {
 } from "@/lib/auth/roles";
 
 const AUTH_ROUTES = ["/login", "/register", "/reset-password"];
-const PUBLIC_ROUTES = ["/", "/pricing", "/auth/callback"];
+const PUBLIC_ROUTES = ["/", "/pricing", "/auth/callback", "/store", "/connect"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const { supabase, user, supabaseResponse } = await updateSession(request);
 
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
+  const isPublicApi =
+    pathname.startsWith("/api/stripe/webhook") ||
+    pathname.startsWith("/api/store/") ||
+    pathname === "/api/connect/checkout";
   const isPublicRoute =
     PUBLIC_ROUTES.some(
       (route) => pathname === route || pathname.startsWith(`${route}/`)
-    ) || pathname.startsWith("/api/stripe/webhook");
+    ) || isPublicApi;
 
   if (user && isAuthRoute) {
     return NextResponse.redirect(new URL("/dashboard", request.url));

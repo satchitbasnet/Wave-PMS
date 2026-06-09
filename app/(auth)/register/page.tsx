@@ -3,7 +3,7 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { RegisterForm } from "@/components/auth/register-form";
 
 export const metadata = {
-  title: "Create account | PropFlow",
+  title: "Create account | Wave",
 };
 
 export default function RegisterPage() {

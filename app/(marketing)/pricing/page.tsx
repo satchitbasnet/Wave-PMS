@@ -1,7 +1,7 @@
 import { PricingTable } from "@/components/marketing/pricing-table";
 
 export const metadata = {
-  title: "Pricing | PropFlow",
+  title: "Pricing | Wave",
   description: "Simple, transparent pricing for property managers of all sizes.",
 };
 

@@ -82,6 +82,7 @@ A renter profile. Can have one active lease, many historical leases.
 | ssn_last4 | text | Encrypted reference |
 | emergency_contact | jsonb | {name, phone, relationship} |
 | screening_status | text | pending \| approved \| denied |
+| status | text | active \| pending \| delinquent \| former |
 | created_at | timestamptz | default now() |
 
 ## leases
@@ -96,6 +97,8 @@ Active or historical lease agreement between tenant and unit.
 | start_date, end_date | date | |
 | monthly_rent | numeric | Locked rent at signing |
 | security_deposit | numeric | |
+| late_fee_amount | numeric | Late fee in dollars |
+| grace_period_days | int4 | Days after due date before late fee |
 | status | text | draft \| active \| expired \| terminated |
 | signed_at | timestamptz | When all parties signed |
 | document_url | text | Supabase storage PDF URL |
@@ -114,6 +117,43 @@ Granular permissions per user per org.
 | role | text | owner \| manager \| tenant \| vendor \| accountant |
 | property_ids | uuid[] | null = access to all properties in org |
 | created_at | timestamptz | default now() |
+
+## payments (Phase 2)
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK |
+| lease_id | uuid | FK → leases.id |
+| tenant_id | uuid | FK → tenants.id |
+| unit_id | uuid | FK → units.id |
+| amount | numeric | Dollars |
+| type | text | rent \| late_fee \| deposit \| refund |
+| status | text | pending \| paid \| failed \| refunded |
+| due_date | date | |
+| paid_at | timestamptz | |
+| stripe_payment_intent_id | text | |
+| notes | text | |
+| created_at | timestamptz | default now() |
+
+## work_orders (Phase 2)
+
+Maintenance requests. Status: open \| assigned \| in_progress \| completed \| cancelled.
+
+## vendors (Phase 2)
+
+Contractors per org. Categories stored as text array.
+
+## inspections / inspection_templates (Phase 2)
+
+Move-in, move-out, annual, drive-by inspections with JSONB checklist data.
+
+## applicants (Phase 2)
+
+Prospective tenant applications before screening.
+
+## tenant_notes (Phase 2)
+
+Manager notes on tenant profiles.
 
 ## RLS summary
 

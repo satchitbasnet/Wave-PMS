@@ -3,7 +3,7 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 
 export const metadata = {
-  title: "Reset password | PropFlow",
+  title: "Reset password | Wave",
 };
 
 export default function ResetPasswordPage({

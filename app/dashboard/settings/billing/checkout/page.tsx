@@ -5,7 +5,7 @@ import { PLANS, type PlanId } from "@/lib/plans";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "Checkout | PropFlow",
+  title: "Checkout | Wave",
 };
 
 export default function BillingCheckoutPage({

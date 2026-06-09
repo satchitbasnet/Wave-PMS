@@ -3,14 +3,14 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata = {
-  title: "Sign in | PropFlow",
+  title: "Sign in | Wave",
 };
 
 export default function LoginPage() {
   return (
     <AuthCard
       title="Welcome back"
-      description="Sign in to your PropFlow account"
+      description="Sign in to your Wave account"
       footer={
         <p>
           Don&apos;t have an account?{" "}

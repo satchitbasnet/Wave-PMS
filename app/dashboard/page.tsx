@@ -9,7 +9,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Dashboard | PropFlow",
+  title: "Dashboard | Wave",
 };
 
 export default async function DashboardPage() {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { APP_NAME } from "@/lib/brand";
 import { ArrowRight, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,7 +15,7 @@ export function Hero() {
           Manage properties, tenants, and leases in one place
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-          PropFlow helps landlords and property managers track units, onboard
+          {APP_NAME} helps landlords and property managers track units, onboard
           tenants, collect rent, and stay organized — without the spreadsheet chaos.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">

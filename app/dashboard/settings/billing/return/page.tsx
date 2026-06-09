@@ -1,7 +1,7 @@
 import { CheckoutReturn } from "@/components/billing/checkout-return";
 
 export const metadata = {
-  title: "Subscription confirmed | PropFlow",
+  title: "Subscription confirmed | Wave",
 };
 
 export default function BillingReturnPage({

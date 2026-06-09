@@ -31,7 +31,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-3xl rounded-2xl bg-slate-900 px-8 py-16 text-center text-white dark:bg-slate-100 dark:text-slate-900">
           <h2 className="text-3xl font-bold">Ready to simplify property management?</h2>
           <p className="mt-4 text-slate-300 dark:text-slate-600">
-            Join landlords and property managers who trust PropFlow.
+            Join landlords and property managers who trust Wave.
           </p>
           <Button size="lg" variant="secondary" className="mt-8" asChild>
             <Link href="/register">Start your free trial</Link>

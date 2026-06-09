@@ -9,6 +9,7 @@ import {
   IconDoor,
   IconFileText,
   IconHome,
+  IconCreditCard,
   IconSettings,
   IconSpeakerphone,
   IconTool,
@@ -29,6 +30,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useDashboardUser } from "@/components/dashboard/user-context";
+import { APP_NAME } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -41,6 +43,7 @@ const NAV_ITEMS = [
   { title: "Accounting", href: "/dashboard/accounting", icon: IconCalculator },
   { title: "Marketing", href: "/dashboard/marketing", icon: IconSpeakerphone },
   { title: "Reports", href: "/dashboard/reports", icon: IconChartBar },
+  { title: "Connect", href: "/dashboard/connect", icon: IconCreditCard },
   { title: "Settings", href: "/dashboard/settings", icon: IconSettings },
 ];
 
@@ -55,14 +58,14 @@ export function AppSidebar() {
         .join("")
         .slice(0, 2)
         .toUpperCase()
-    : "PF";
+    : "W";
 
   return (
     <Sidebar className="w-60 border-r border-slate-200 dark:border-slate-800">
       <SidebarHeader className="border-b border-slate-100 px-4 py-4 dark:border-slate-800">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <IconHome className="h-5 w-5 text-[#534AB7]" stroke={1.75} />
-          <span>PropFlow</span>
+          <span>{APP_NAME}</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>

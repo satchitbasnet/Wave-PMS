@@ -2,7 +2,7 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { OnboardingForm } from "@/components/auth/onboarding-form";
 
 export const metadata = {
-  title: "Onboarding | PropFlow",
+  title: "Onboarding | Wave",
 };
 
 export default function OnboardingPage() {

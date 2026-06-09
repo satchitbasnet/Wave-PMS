@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { APP_NAME } from "@/lib/brand";
 import { Building2 } from "lucide-react";
 
 export function Footer() {
@@ -7,10 +8,10 @@ export function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
         <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
           <Building2 className="h-5 w-5" />
-          PropFlow
+          {APP_NAME}
         </Link>
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} PropFlow. All rights reserved.
+          © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
         </p>
         <div className="flex gap-6 text-sm text-muted-foreground">
           <Link href="/pricing" className="hover:text-slate-900 dark:hover:text-slate-200">

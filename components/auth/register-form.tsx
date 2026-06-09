@@ -36,7 +36,8 @@ export function RegisterForm() {
         <Input
           id="organizationName"
           name="organizationName"
-          placeholder="Acme Properties"
+          placeholder="Wave"
+          defaultValue="Wave"
           required
         />
       </div>
