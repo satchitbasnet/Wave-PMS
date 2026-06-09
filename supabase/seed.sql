@@ -1,0 +1,2 @@
+-- Optional seed data for local development
+-- Run after 001_initial_schema.sql
